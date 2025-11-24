@@ -74,9 +74,9 @@ Installation
 
 ● Clone the repository:
 
-  git clone https://github.com/ulassahin-ist/inghub-employee-crud
+  git clone https://github.com/ulassahin-ist/litelement-inghubs-employee-crud
   
-  cd inghub-employee-crud
+  cd litelement-inghubs-employee-crud
 
 ● Install dependencies:
 
