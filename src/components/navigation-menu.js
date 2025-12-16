@@ -106,20 +106,36 @@ class NavigationMenu extends LitElement {
       new CustomEvent('language-changed', {detail: this.lang})
     );
   }
+
   get t() {
     return translations[this.lang] || translations.en;
   }
 
+  getBasePath() {
+    // Get base path from <base> tag
+    const base = document.querySelector('base');
+    return base ? base.getAttribute('href') : '/';
+  }
+
   render() {
+    const basePath = this.getBasePath();
+
     return html`
       <div class="top-header">
         <div class="logo-title">
-          <img src="/src/assets/images/logo.png" alt="ING" class="logo" />
+          <img
+            src="${basePath}src/assets/images/logo.png"
+            alt="ING"
+            class="logo"
+          />
           <span class="company-name">ING</span>
         </div>
         <div class="buttons">
           <button
-            class=${this.currentPath === '/employees' ? 'active' : ''}
+            class=${this.currentPath.includes('/employees') &&
+            !this.currentPath.includes('/new')
+              ? 'active'
+              : ''}
             @click=${() => this.navigate('/employees')}
           >
             <svg
@@ -143,7 +159,7 @@ class NavigationMenu extends LitElement {
           </button>
 
           <button
-            class=${this.currentPath === '/employees/new' ? 'active' : ''}
+            class=${this.currentPath.includes('/employees/new') ? 'active' : ''}
             @click=${() => this.navigate('/employees/new')}
           >
             <svg
@@ -166,7 +182,9 @@ class NavigationMenu extends LitElement {
           <button @click=${this.toggleLang}>
             <img
               class="language"
-              src="/src/assets/images/${this.lang === 'en' ? 'tr' : 'en'}.png"
+              src="${basePath}src/assets/images/${this.lang === 'en'
+                ? 'tr'
+                : 'en'}.png"
               alt="${this.lang === 'en' ? 'tr' : 'en'}"
             />
           </button>
