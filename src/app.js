@@ -5,24 +5,26 @@ import './components/navigation-menu.js';
 import './components/employee-list.js';
 import './components/employee-form.js';
 
-import './utils/storage.js';
-
 class AppShell extends LitElement {
   static styles = css`
-    :host {
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
     main {
       padding: 16px;
     }
   `;
 
+  // 🔥 REQUIRED: disable shadow DOM
+  createRenderRoot() {
+    return this;
+  }
+
   firstUpdated() {
-    const outlet = this.renderRoot.querySelector('#outlet');
+    const outlet = this.querySelector('#outlet');
     const router = new Router(outlet);
-    window.router = router;
+
+    // 🔥 REQUIRED for GitHub Pages
+    const baseHref =
+      document.querySelector('base')?.getAttribute('href') ?? '/';
+    router.baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
 
     router.setRoutes([
       {path: '/', redirect: '/employees'},

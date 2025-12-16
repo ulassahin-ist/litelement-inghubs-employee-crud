@@ -2,66 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Primary Meta Tags -->
-    <title>ING Employee Management System</title>
-    <meta name="title" content="ING Employee Management System" />
-    <meta
-      name="description"
-      content="Modern employee management system for HR and admin use"
-    />
-
-    <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/litelement-inghubs-employee-crud/favicon.ico" />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="/litelement-inghubs-employee-crud/src/assets/favicons/favicon-16x16.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="/litelement-inghubs-employee-crud/src/assets/favicons/favicon-32x32.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/litelement-inghubs-employee-crud/src/assets/favicons/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="192x192"
-      href="/litelement-inghubs-employee-crud/src/assets/favicons/android-chrome-192x192.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="512x512"
-      href="/litelement-inghubs-employee-crud/src/assets/favicons/android-chrome-512x512.png"
-    />
-    <link rel="manifest" href="/litelement-inghubs-employee-crud/site.webmanifest" />
-
-    <!-- Theme Color -->
-    <meta name="theme-color" content="#ff6200" />
-    <meta name="msapplication-TileColor" content="#ff6200" />
-    <meta name="msapplication-config" content="/litelement-inghubs-employee-crud/browserconfig.xml" />
-
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="/litelement-inghubs-employee-crud/src/css/global.css" />
-
+    <!-- IMPORTANT: base must be FIRST -->
     <base href="/litelement-inghubs-employee-crud/" />
 
-    <!-- ES Module Shims for import map support in older browsers -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ING Employee Management System</title>
+
+    <!-- Favicons (RELATIVE paths only) -->
+    <link rel="icon" href="favicon.ico" />
+    <link rel="manifest" href="site.webmanifest" />
+    <meta name="msapplication-config" content="browserconfig.xml" />
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="src/css/global.css" />
+
+    <!-- ES module shims -->
     <script
       async
       src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"
     ></script>
 
-    <!-- Import Map for bare module specifiers -->
+    <!-- Import map -->
     <script type="importmap">
       {
         "imports": {
@@ -73,19 +35,9 @@
       }
     </script>
   </head>
-  <body>
-    <script>
-      // GitHub Pages SPA redirect support
-      (function() {
-        var redirect = sessionStorage.redirect;
-        delete sessionStorage.redirect;
-        if (redirect && redirect !== location.href) {
-          history.replaceState(null, null, redirect);
-        }
-      })();
-    </script>
 
+  <body>
     <app-shell></app-shell>
-    <script type="module" src="/litelement-inghubs-employee-crud/src/app.js"></script>
+    <script type="module" src="src/app.js"></script>
   </body>
 </html>
