@@ -1,4 +1,10 @@
-Employee Management Web App
+<p align="center">
+  <a href="https://ulassahin-ist.github.io/litelement-inghubs-employee-crud/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-GitHub%20Pages-orange?style=for-the-badge" />
+  </a>
+</p>
+
+LitElement + Vaadin Router employee management SPA
 
 A modern, responsive, and multilingual employee management system built with LitElement, JavaScript, and Vaadin Router. Designed to be intuitive for internal HR or admin use, featuring real-time validation, toast notifications, and confirm modals.
 
@@ -64,9 +70,7 @@ This Employee Management Web Application fully implements all the requested feat
 
         Detailed unit tests cover all components and functions.
 
-
 Coverage exceeds 85%, ensuring reliability.
-
 
 \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \- \-
 
@@ -74,17 +78,17 @@ Installation
 
 ● Clone the repository:
 
-  git clone https://github.com/ulassahin-ist/litelement-inghubs-employee-crud
-  
-  cd litelement-inghubs-employee-crud
+git clone https://github.com/ulassahin-ist/litelement-inghubs-employee-crud
+
+cd litelement-inghubs-employee-crud
 
 ● Install dependencies:
 
-  npm install
+npm install
 
 ● Start the development server:
 
-  npm start
+npm start
 
 Open your browser at http://localhost:8000
 

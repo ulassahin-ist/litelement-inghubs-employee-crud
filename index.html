@@ -2,66 +2,60 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+
+    <!-- IMPORTANT: base must be FIRST -->
+    <base href="/" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <!-- Primary Meta Tags -->
     <title>ING Employee Management System</title>
-    <meta name="title" content="ING Employee Management System" />
-    <meta
-      name="description"
-      content="Modern employee management system for HR and admin use"
-    />
-
     <!-- Favicons -->
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link
       rel="icon"
       type="image/png"
       sizes="16x16"
-      href="/src/assets/favicons/favicon-16x16.png"
+      href="src/assets/favicons/favicon-16x16.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="32x32"
-      href="/src/assets/favicons/favicon-32x32.png"
+      href="src/assets/favicons/favicon-32x32.png"
     />
     <link
       rel="apple-touch-icon"
       sizes="180x180"
-      href="/src/assets/favicons/apple-touch-icon.png"
+      href="src/assets/favicons/apple-touch-icon.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="192x192"
-      href="/src/assets/favicons/android-chrome-192x192.png"
+      href="src/assets/favicons/android-chrome-192x192.png"
     />
     <link
       rel="icon"
       type="image/png"
       sizes="512x512"
-      href="/src/assets/favicons/android-chrome-512x512.png"
+      href="src/assets/favicons/android-chrome-512x512.png"
     />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="manifest" href="site.webmanifest" />
 
     <!-- Theme Color -->
     <meta name="theme-color" content="#ff6200" />
     <meta name="msapplication-TileColor" content="#ff6200" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="msapplication-config" content="browserconfig.xml" />
 
-    <!-- Stylesheets -->
-    <link rel="stylesheet" href="../src/css/global.css" />
+    <!-- Styles -->
+    <link rel="stylesheet" href="src/css/global.css" />
 
-    <base href="/" />
-
-    <!-- ES Module Shims for import map support in older browsers -->
+    <!-- ES module shims -->
     <script
       async
       src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"
     ></script>
 
-    <!-- Import Map for bare module specifiers -->
+    <!-- Import map -->
     <script type="importmap">
       {
         "imports": {
@@ -72,9 +66,24 @@
         }
       }
     </script>
+    <script>
+      (function () {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (!redirect) return;
+
+        var base = document.querySelector('base')?.getAttribute('href') || '/';
+        var baseClean = base.endsWith('/') ? base.slice(0, -1) : base;
+
+        // redirect is "/employees/new" (no repo prefix)
+        history.replaceState(null, '', baseClean + redirect);
+      })();
+    </script>
   </head>
+
   <body>
     <app-shell></app-shell>
-    <script type="module" src="./src/app.js"></script>
+
+    <script type="module" src="src/app.js"></script>
   </body>
 </html>

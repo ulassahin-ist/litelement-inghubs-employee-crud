@@ -1,8 +1,7 @@
 import {LitElement, html, css} from 'lit';
-import {Router} from '@vaadin/router';
-
 import {translations} from '../utils/language.js';
 import {AppState} from '../utils/storage.js';
+import {navigateTo} from '../utils/router-helper.js';
 
 class NavigationMenu extends LitElement {
   static properties = {
@@ -13,7 +12,7 @@ class NavigationMenu extends LitElement {
   constructor() {
     super();
     this.lang = AppState.lang;
-    this.currentPath = window.location.pathname;
+    this.currentPath = '/';
   }
 
   static styles = css`
@@ -46,7 +45,6 @@ class NavigationMenu extends LitElement {
       border: none;
       background: none;
       color: var(--primary-light);
-      font-weight: bold;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -76,35 +74,51 @@ class NavigationMenu extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    window.addEventListener('vaadin-router-location-changed', this.updatePath);
+    this.syncPath();
+    window.addEventListener('popstate', this.syncPath);
   }
 
   disconnectedCallback() {
-    window.removeEventListener(
-      'vaadin-router-location-changed',
-      this.updatePath
-    );
+    window.removeEventListener('popstate', this.syncPath);
     super.disconnectedCallback();
   }
 
-  updatePath = (e) => {
-    this.currentPath = e.detail.location.pathname;
+  syncPath = () => {
+    const baseHref =
+      document.querySelector('base')?.getAttribute('href') ?? '/';
+    const baseClean = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+
+    let p = window.location.pathname;
+
+    // Strip GH Pages repo prefix
+    if (baseClean && baseClean !== '/' && p.startsWith(baseClean)) {
+      p = p.slice(baseClean.length) || '/';
+    }
+
+    this.currentPath = p;
     this.requestUpdate();
   };
 
-  navigate(path) {
-    Router.go(path);
+  async navigate(path, e) {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+
+    await navigateTo(path);
+    this.syncPath();
   }
 
-  toggleLang() {
+  toggleLang(e) {
+    e?.preventDefault?.();
+
     AppState.lang = AppState.lang === 'en' ? 'tr' : 'en';
     this.lang = AppState.lang;
     document.documentElement.lang = this.lang;
-    this.requestUpdate();
 
     window.dispatchEvent(
       new CustomEvent('language-changed', {detail: this.lang})
     );
+
+    this.requestUpdate();
   }
 
   get t() {
@@ -112,31 +126,32 @@ class NavigationMenu extends LitElement {
   }
 
   getImagePath(filename) {
-    // Use relative path from the HTML location
-    const base = document.querySelector('base');
-    if (base) {
-      const href = base.getAttribute('href');
-      // Remove trailing slash if present
-      const basePath = href.endsWith('/') ? href.slice(0, -1) : href;
-      return `${basePath}/src/assets/images/${filename}`;
-    }
-    return `./src/assets/images/${filename}`;
+    const baseHref =
+      document.querySelector('base')?.getAttribute('href') ?? '/';
+    const baseClean = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+    return `${baseClean}/src/assets/images/${filename}`;
   }
 
+  /* ---------- render ---------- */
+
   render() {
+    const isNew = this.currentPath === '/employees/new';
+    const isEmployees =
+      this.currentPath === '/employees' ||
+      this.currentPath.startsWith('/employees/');
+
     return html`
       <div class="top-header">
         <div class="logo-title">
           <img src="${this.getImagePath('logo.png')}" alt="ING" class="logo" />
           <span class="company-name">ING</span>
         </div>
+
         <div class="buttons">
           <button
-            class=${this.currentPath.includes('/employees') &&
-            !this.currentPath.includes('/new')
-              ? 'active'
-              : ''}
-            @click=${() => this.navigate('/employees')}
+            type="button"
+            class=${isEmployees && !isNew ? 'active' : ''}
+            @click=${(e) => this.navigate('/employees', e)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -155,12 +170,13 @@ class NavigationMenu extends LitElement {
               <circle cx="18" cy="18" r="3" />
               <path d="m22 22-1.9-1.9" />
             </svg>
-            &nbsp ${this.t.employees}
+            &nbsp;${this.t.employees}
           </button>
 
           <button
-            class=${this.currentPath.includes('/employees/new') ? 'active' : ''}
-            @click=${() => this.navigate('/employees/new')}
+            type="button"
+            class=${isNew ? 'active' : ''}
+            @click=${(e) => this.navigate('/employees/new', e)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -176,10 +192,10 @@ class NavigationMenu extends LitElement {
               <path d="M5 12h14" />
               <path d="M12 5v14" />
             </svg>
-            &nbsp ${this.t.addEmployee}
+            &nbsp;${this.t.addEmployee}
           </button>
 
-          <button @click=${this.toggleLang}>
+          <button type="button" @click=${(e) => this.toggleLang(e)}>
             <img
               class="language"
               src="${this.getImagePath(
