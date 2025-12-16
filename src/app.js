@@ -5,22 +5,21 @@ import './components/navigation-menu.js';
 import './components/employee-list.js';
 import './components/employee-form.js';
 
-// ✅ SINGLETON ROUTER (important for GH Pages)
 let router = null;
 
-function ensureRouter(outlet) {
+function initRouter(outlet) {
   if (router) return router;
 
   router = new Router(outlet);
   window.router = router;
 
-  // ✅ base path from <base href="/repo/"> (set by your build script)
+  // base href is "/" locally, "/litelement-inghubs-employee-crud/" on GH Pages
   const baseHref = document.querySelector('base')?.getAttribute('href') ?? '/';
   const basePath = baseHref.endsWith('/') ? baseHref : baseHref + '/';
 
+  // IMPORTANT: baseUrl must be a PATH (not full URL string)
   router.baseUrl = basePath;
 
-  // ✅ Set routes ONCE
   router.setRoutes([
     {path: '/', redirect: '/employees'},
     {path: '/employees', component: 'employee-list'},
@@ -37,15 +36,12 @@ class AppShell extends LitElement {
       padding: 16px;
     }
   `;
-
-  // ✅ REQUIRED: disable shadow DOM so Router works reliably
   createRenderRoot() {
     return this;
   }
 
   firstUpdated() {
-    const outlet = this.querySelector('#outlet');
-    ensureRouter(outlet);
+    initRouter(this.querySelector('#outlet'));
   }
 
   render() {

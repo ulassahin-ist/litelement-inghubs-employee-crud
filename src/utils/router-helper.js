@@ -1,26 +1,13 @@
-// src/utils/router-helper.js
-export async function navigateTo(path) {
-  if (!window.router) {
-    console.error('[navigateTo] Router not initialized yet');
-    return;
-  }
+import {Router} from '@vaadin/router';
 
-  const base = window.router.baseUrl || '/';
-  const baseClean = base.endsWith('/') ? base.slice(0, -1) : base;
+export function navigateTo(path) {
+  const baseHref = document.querySelector('base')?.getAttribute('href') ?? '/';
+  const baseClean = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
 
-  // Allow passing:
-  //  - "/employees/1"
-  //  - "employees/1"
-  //  - "/litelement-inghubs-employee-crud/employees/1" (full app path)
-  let p = String(path);
+  const p = path.startsWith('/') ? path : `/${path}`;
 
-  // If someone passed full app path, strip base
-  if (p.startsWith(baseClean + '/')) p = p.slice(baseClean.length);
+  // final URL in address bar should be "/repo/..." on GH Pages, "/..." locally
+  const full = baseClean === '' || baseClean === '/' ? p : `${baseClean}${p}`;
 
-  // Now strip leading slash -> make it relative (REQUIRED for render w/ baseUrl)
-  if (p.startsWith('/')) p = p.slice(1);
-
-  console.log('[navigateTo]', {in: path, base: window.router.baseUrl, out: p});
-
-  return window.router.render(p);
+  return Router.go(full);
 }
