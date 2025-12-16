@@ -45,7 +45,6 @@ class NavigationMenu extends LitElement {
       border: none;
       background: none;
       color: var(--primary-light);
-      font-weight: bold;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -73,30 +72,20 @@ class NavigationMenu extends LitElement {
     }
   `;
 
-  connectedCallback() {
-    super.connectedCallback();
-    window.addEventListener('vaadin-router-location-changed', this.updatePath);
-  }
+  async navigate(path, e) {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    await navigateTo(path);
 
-  disconnectedCallback() {
-    window.removeEventListener(
-      'vaadin-router-location-changed',
-      this.updatePath
-    );
-    super.disconnectedCallback();
-  }
-
-  updatePath = (e) => {
-    this.currentPath = e.detail.location.pathname;
+    // update active highlight reliably
+    this.currentPath = window.location.pathname;
     this.requestUpdate();
-  };
-
-  // Navigate using the helper
-  navigate(path) {
-    navigateTo(path);
   }
 
-  toggleLang() {
+  toggleLang(e) {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+
     AppState.lang = AppState.lang === 'en' ? 'tr' : 'en';
     this.lang = AppState.lang;
     document.documentElement.lang = this.lang;
@@ -128,13 +117,15 @@ class NavigationMenu extends LitElement {
           <img src="${this.getImagePath('logo.png')}" alt="ING" class="logo" />
           <span class="company-name">ING</span>
         </div>
+
         <div class="buttons">
           <button
+            type="button"
             class=${this.currentPath.includes('/employees') &&
             !this.currentPath.includes('/new')
               ? 'active'
               : ''}
-            @click=${() => this.navigate('/employees')}
+            @click=${(e) => this.navigate('/employees', e)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -153,12 +144,13 @@ class NavigationMenu extends LitElement {
               <circle cx="18" cy="18" r="3" />
               <path d="m22 22-1.9-1.9" />
             </svg>
-            &nbsp ${this.t.employees}
+            &nbsp;${this.t.employees}
           </button>
 
           <button
+            type="button"
             class=${this.currentPath.includes('/employees/new') ? 'active' : ''}
-            @click=${() => this.navigate('/employees/new')}
+            @click=${(e) => this.navigate('/employees/new', e)}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -174,10 +166,10 @@ class NavigationMenu extends LitElement {
               <path d="M5 12h14" />
               <path d="M12 5v14" />
             </svg>
-            &nbsp ${this.t.addEmployee}
+            &nbsp;${this.t.addEmployee}
           </button>
 
-          <button @click=${this.toggleLang}>
+          <button type="button" @click=${(e) => this.toggleLang(e)}>
             <img
               class="language"
               src="${this.getImagePath(
