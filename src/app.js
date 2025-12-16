@@ -24,15 +24,12 @@ class AppShell extends LitElement {
     const router = new Router(outlet);
     window.router = router;
 
-    const base = document.querySelector('base');
-    const basePath = base ? base.getAttribute('href') : '/';
-
     router.setRoutes([
-      {path: basePath, redirect: `${basePath}employees`},
-      {path: `${basePath}employees`, component: 'employee-list'},
-      {path: `${basePath}employees/new`, component: 'employee-form'},
-      {path: `${basePath}employees/:id`, component: 'employee-form'},
-      {path: '(.*)', redirect: `${basePath}employees`},
+      {path: '/', redirect: '/employees'},
+      {path: '/employees', component: 'employee-list'},
+      {path: '/employees/new', component: 'employee-form'},
+      {path: '/employees/:id', component: 'employee-form'},
+      {path: '(.*)', redirect: '/employees'},
     ]);
   }
 
