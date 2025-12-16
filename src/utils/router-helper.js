@@ -1,10 +1,12 @@
+// src/utils/router-helper.js
 export async function navigateTo(path) {
-  const p = path.startsWith('/') ? path : `/${path}`;
-
   if (!window.router) {
-    console.error('Router not initialized yet');
+    console.error('Router not initialized');
     return;
   }
 
-  await window.router.render(p);
+  // 🔥 MUST be relative when baseUrl is set
+  const clean = path.startsWith('/') ? path.slice(1) : path;
+
+  await window.router.render(clean);
 }
