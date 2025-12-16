@@ -60,6 +60,46 @@ indexHtml = indexHtml.replace(
   `src="${basePath}src/app.js"`
 );
 
+// Write index.html
+fs.writeFileSync(path.join(distDir, 'index.html'), indexHtml);
+
+// Create 404.html with redirect script for SPA routing
+const html404 = `<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <script>
+      // GitHub Pages SPA redirect
+      // This script takes the current url and converts the path and query
+      // string into just a query string, and then redirects the browser
+      // to the new url with the redirect in the query string
+      sessionStorage.redirect = location.href;
+    </script>
+    <meta http-equiv="refresh" content="0;URL='${basePath}'">
+  </head>
+  <body>
+  </body>
+</html>`;
+
+fs.writeFileSync(path.join(distDir, '404.html'), html404);
+
+// Add redirect script to index.html
+const redirectScript = `
+    <script>
+      // GitHub Pages SPA redirect support
+      (function() {
+        var redirect = sessionStorage.redirect;
+        delete sessionStorage.redirect;
+        if (redirect && redirect !== location.href) {
+          history.replaceState(null, null, redirect);
+        }
+      })();
+    </script>
+`;
+
+// Insert the redirect script right after the opening <body> tag
+indexHtml = indexHtml.replace('<body>', '<body>' + redirectScript);
 fs.writeFileSync(path.join(distDir, 'index.html'), indexHtml);
 
 // Copy src directory
@@ -100,4 +140,5 @@ rootAssets.forEach((asset) => {
 fs.writeFileSync(path.join(distDir, '.nojekyll'), '');
 
 console.log('Build complete! Files copied to dist/');
+console.log('Created 404.html for SPA routing support');
 console.log(`Your app will be available at: ${homepage}`);

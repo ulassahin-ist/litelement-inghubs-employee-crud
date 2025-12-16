@@ -106,20 +106,36 @@ class NavigationMenu extends LitElement {
       new CustomEvent('language-changed', {detail: this.lang})
     );
   }
+
   get t() {
     return translations[this.lang] || translations.en;
+  }
+
+  getImagePath(filename) {
+    // Use relative path from the HTML location
+    const base = document.querySelector('base');
+    if (base) {
+      const href = base.getAttribute('href');
+      // Remove trailing slash if present
+      const basePath = href.endsWith('/') ? href.slice(0, -1) : href;
+      return `${basePath}/src/assets/images/${filename}`;
+    }
+    return `./src/assets/images/${filename}`;
   }
 
   render() {
     return html`
       <div class="top-header">
         <div class="logo-title">
-          <img src="/src/assets/images/logo.png" alt="ING" class="logo" />
+          <img src="${this.getImagePath('logo.png')}" alt="ING" class="logo" />
           <span class="company-name">ING</span>
         </div>
         <div class="buttons">
           <button
-            class=${this.currentPath === '/employees' ? 'active' : ''}
+            class=${this.currentPath.includes('/employees') &&
+            !this.currentPath.includes('/new')
+              ? 'active'
+              : ''}
             @click=${() => this.navigate('/employees')}
           >
             <svg
@@ -143,7 +159,7 @@ class NavigationMenu extends LitElement {
           </button>
 
           <button
-            class=${this.currentPath === '/employees/new' ? 'active' : ''}
+            class=${this.currentPath.includes('/employees/new') ? 'active' : ''}
             @click=${() => this.navigate('/employees/new')}
           >
             <svg
@@ -166,7 +182,9 @@ class NavigationMenu extends LitElement {
           <button @click=${this.toggleLang}>
             <img
               class="language"
-              src="/src/assets/images/${this.lang === 'en' ? 'tr' : 'en'}.png"
+              src="${this.getImagePath(
+                this.lang === 'en' ? 'tr.png' : 'en.png'
+              )}"
               alt="${this.lang === 'en' ? 'tr' : 'en'}"
             />
           </button>

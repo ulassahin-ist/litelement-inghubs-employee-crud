@@ -11,7 +11,6 @@ class AppShell extends LitElement {
   static styles = css`
     :host {
       display: block;
-
       margin: 0;
       padding: 0;
     }
