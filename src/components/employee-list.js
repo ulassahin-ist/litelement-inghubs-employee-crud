@@ -1,8 +1,8 @@
 import {LitElement, html, css} from 'lit';
 import {translations} from '../utils/language.js';
 import {AppState, getEmployees, saveEmployees} from '../utils/storage.js';
-import {Router} from '@vaadin/router';
 import {formatDate} from '../utils/format.js';
+import {navigateTo} from '../utils/router-helper.js';
 
 export class EmployeeList extends LitElement {
   static properties = {
@@ -585,7 +585,7 @@ export class EmployeeList extends LitElement {
     if (this.confirmAction === 'delete') {
       this.proceedDelete();
     } else if (this.confirmAction === 'edit') {
-      Router.go(`/employees/${this.employeeSelected.id}`);
+      navigateTo(`/employees/${this.employeeSelected.id}`);
       this.showConfirmModal = false;
 
       this.employeeSelected = null;

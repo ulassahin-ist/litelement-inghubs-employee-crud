@@ -2,7 +2,7 @@ import {LitElement, html, css} from 'lit';
 import {translations} from '../utils/language.js';
 import {getEmployees, saveEmployees, AppState} from '../utils/storage.js';
 import {formatPhone, formatPhoneInput} from '../utils/format.js';
-import {Router} from '@vaadin/router';
+import {navigateTo} from '../utils/router-helper.js';
 
 export class EmployeeForm extends LitElement {
   static properties = {
@@ -277,7 +277,7 @@ export class EmployeeForm extends LitElement {
       }
     }
     @media (max-width: 600px) {
-       :host {
+      :host {
         padding: 0;
       }
       form {
@@ -352,7 +352,7 @@ export class EmployeeForm extends LitElement {
     const employees = getEmployees() || [];
     const emp = employees.find((e) => String(e.id) === String(this.employeeId));
     if (!emp) {
-      Router.go(`/employees`);
+      navigateTo('/employees');
       return;
     }
 
@@ -476,7 +476,7 @@ export class EmployeeForm extends LitElement {
         await this.showTempToast(this.t.employeeAdded);
       }
 
-      Router.go(`/employees`);
+      navigateTo('/employees');
     }
   }
 
@@ -500,7 +500,7 @@ export class EmployeeForm extends LitElement {
   }
 
   cancel() {
-    Router.go(`/employees`);
+    navigateTo('/employees');
   }
 
   renderConfirmModal() {

@@ -1,8 +1,7 @@
 import {LitElement, html, css} from 'lit';
-import {Router} from '@vaadin/router';
-
 import {translations} from '../utils/language.js';
 import {AppState} from '../utils/storage.js';
+import {navigateTo} from '../utils/router-helper.js';
 
 class NavigationMenu extends LitElement {
   static properties = {
@@ -92,8 +91,9 @@ class NavigationMenu extends LitElement {
     this.requestUpdate();
   };
 
+  // Navigate using the helper
   navigate(path) {
-    Router.go(path);
+    navigateTo(path);
   }
 
   toggleLang() {
@@ -112,11 +112,9 @@ class NavigationMenu extends LitElement {
   }
 
   getImagePath(filename) {
-    // Use relative path from the HTML location
     const base = document.querySelector('base');
     if (base) {
       const href = base.getAttribute('href');
-      // Remove trailing slash if present
       const basePath = href.endsWith('/') ? href.slice(0, -1) : href;
       return `${basePath}/src/assets/images/${filename}`;
     }
