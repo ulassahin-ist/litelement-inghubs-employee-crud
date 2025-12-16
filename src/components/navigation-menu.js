@@ -111,23 +111,23 @@ class NavigationMenu extends LitElement {
     return translations[this.lang] || translations.en;
   }
 
-  getBasePath() {
-    // Get base path from <base> tag
+  getImagePath(filename) {
+    // Use relative path from the HTML location
     const base = document.querySelector('base');
-    return base ? base.getAttribute('href') : '/';
+    if (base) {
+      const href = base.getAttribute('href');
+      // Remove trailing slash if present
+      const basePath = href.endsWith('/') ? href.slice(0, -1) : href;
+      return `${basePath}/src/assets/images/${filename}`;
+    }
+    return `./src/assets/images/${filename}`;
   }
 
   render() {
-    const basePath = this.getBasePath();
-
     return html`
       <div class="top-header">
         <div class="logo-title">
-          <img
-            src="${basePath}src/assets/images/logo.png"
-            alt="ING"
-            class="logo"
-          />
+          <img src="${this.getImagePath('logo.png')}" alt="ING" class="logo" />
           <span class="company-name">ING</span>
         </div>
         <div class="buttons">
@@ -182,9 +182,9 @@ class NavigationMenu extends LitElement {
           <button @click=${this.toggleLang}>
             <img
               class="language"
-              src="${basePath}src/assets/images/${this.lang === 'en'
-                ? 'tr'
-                : 'en'}.png"
+              src="${this.getImagePath(
+                this.lang === 'en' ? 'tr.png' : 'en.png'
+              )}"
               alt="${this.lang === 'en' ? 'tr' : 'en'}"
             />
           </button>
