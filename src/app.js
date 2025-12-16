@@ -13,11 +13,9 @@ function initRouter(outlet) {
   router = new Router(outlet);
   window.router = router;
 
-  // base href is "/" locally, "/litelement-inghubs-employee-crud/" on GH Pages
   const baseHref = document.querySelector('base')?.getAttribute('href') ?? '/';
   const basePath = baseHref.endsWith('/') ? baseHref : baseHref + '/';
 
-  // IMPORTANT: baseUrl must be a PATH (not full URL string)
   router.baseUrl = basePath;
 
   router.setRoutes([

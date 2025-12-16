@@ -12,7 +12,7 @@ class NavigationMenu extends LitElement {
   constructor() {
     super();
     this.lang = AppState.lang;
-    this.currentPath = window.location.pathname;
+    this.currentPath = '/';
   }
 
   static styles = css`
@@ -72,28 +72,53 @@ class NavigationMenu extends LitElement {
     }
   `;
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.syncPath();
+    window.addEventListener('popstate', this.syncPath);
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('popstate', this.syncPath);
+    super.disconnectedCallback();
+  }
+
+  syncPath = () => {
+    const baseHref =
+      document.querySelector('base')?.getAttribute('href') ?? '/';
+    const baseClean = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+
+    let p = window.location.pathname;
+
+    // Strip GH Pages repo prefix
+    if (baseClean && baseClean !== '/' && p.startsWith(baseClean)) {
+      p = p.slice(baseClean.length) || '/';
+    }
+
+    this.currentPath = p;
+    this.requestUpdate();
+  };
+
   async navigate(path, e) {
     e?.preventDefault?.();
     e?.stopPropagation?.();
-    await navigateTo(path);
 
-    // update active highlight reliably
-    this.currentPath = window.location.pathname;
-    this.requestUpdate();
+    await navigateTo(path);
+    this.syncPath();
   }
 
   toggleLang(e) {
     e?.preventDefault?.();
-    e?.stopPropagation?.();
 
     AppState.lang = AppState.lang === 'en' ? 'tr' : 'en';
     this.lang = AppState.lang;
     document.documentElement.lang = this.lang;
-    this.requestUpdate();
 
     window.dispatchEvent(
       new CustomEvent('language-changed', {detail: this.lang})
     );
+
+    this.requestUpdate();
   }
 
   get t() {
@@ -101,16 +126,20 @@ class NavigationMenu extends LitElement {
   }
 
   getImagePath(filename) {
-    const base = document.querySelector('base');
-    if (base) {
-      const href = base.getAttribute('href');
-      const basePath = href.endsWith('/') ? href.slice(0, -1) : href;
-      return `${basePath}/src/assets/images/${filename}`;
-    }
-    return `./src/assets/images/${filename}`;
+    const baseHref =
+      document.querySelector('base')?.getAttribute('href') ?? '/';
+    const baseClean = baseHref.endsWith('/') ? baseHref.slice(0, -1) : baseHref;
+    return `${baseClean}/src/assets/images/${filename}`;
   }
 
+  /* ---------- render ---------- */
+
   render() {
+    const isNew = this.currentPath === '/employees/new';
+    const isEmployees =
+      this.currentPath === '/employees' ||
+      this.currentPath.startsWith('/employees/');
+
     return html`
       <div class="top-header">
         <div class="logo-title">
@@ -121,10 +150,7 @@ class NavigationMenu extends LitElement {
         <div class="buttons">
           <button
             type="button"
-            class=${this.currentPath.includes('/employees') &&
-            !this.currentPath.includes('/new')
-              ? 'active'
-              : ''}
+            class=${isEmployees && !isNew ? 'active' : ''}
             @click=${(e) => this.navigate('/employees', e)}
           >
             <svg
@@ -149,7 +175,7 @@ class NavigationMenu extends LitElement {
 
           <button
             type="button"
-            class=${this.currentPath.includes('/employees/new') ? 'active' : ''}
+            class=${isNew ? 'active' : ''}
             @click=${(e) => this.navigate('/employees/new', e)}
           >
             <svg
