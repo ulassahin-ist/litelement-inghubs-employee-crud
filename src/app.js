@@ -21,10 +21,11 @@ class AppShell extends LitElement {
     const outlet = this.querySelector('#outlet');
     const router = new Router(outlet);
 
-    // 🔥 REQUIRED for GitHub Pages
     const baseHref =
       document.querySelector('base')?.getAttribute('href') ?? '/';
-    router.baseUrl = baseHref.endsWith('/') ? baseHref : baseHref + '/';
+    const basePath = baseHref.endsWith('/') ? baseHref : baseHref + '/';
+
+    router.baseUrl = new URL(basePath, window.location.origin).toString();
 
     router.setRoutes([
       {path: '/', redirect: '/employees'},
