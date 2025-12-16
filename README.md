@@ -1,8 +1,5 @@
-<p align="center">
-  <a href="https://ulassahin-ist.github.io/litelement-inghubs-employee-crud/" target="_blank">
-    <img src="https://img.shields.io/badge/🚀%20Live%20Demo-GitHub%20Pages-orange?style=for-the-badge" />
-  </a>
-</p>
+[![Live Demo](https://img.shields.io/badge/demo-live-yellow)](https://ulassahin-ist.github.io/litelement-inghubs-employee-crud/)
+[![GitHub](https://img.shields.io/badge/github-repository-blue)](https://github.com/ulassahin-ist/litelement-inghubs-employee-crud)
 
 LitElement + Vaadin Router employee management SPA
 
