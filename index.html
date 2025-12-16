@@ -66,10 +66,6 @@
         }
       }
     </script>
-  </head>
-
-  <body>
-    <app-shell></app-shell>
     <script>
       (function () {
         var redirect = sessionStorage.redirect;
@@ -79,10 +75,14 @@
         var base = document.querySelector('base')?.getAttribute('href') || '/';
         var baseClean = base.endsWith('/') ? base.slice(0, -1) : base;
 
-        // redirect is "/employees/new"
-        history.replaceState(null, null, baseClean + redirect);
+        // redirect is "/employees/new" (no repo prefix)
+        history.replaceState(null, '', baseClean + redirect);
       })();
     </script>
+  </head>
+
+  <body>
+    <app-shell></app-shell>
 
     <script type="module" src="src/app.js"></script>
   </body>

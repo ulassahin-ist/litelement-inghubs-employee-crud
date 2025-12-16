@@ -1,20 +1,17 @@
 <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Redirecting...</title>
-        <script>
-        (function () {
-            var base = '/litelement-inghubs-employee-crud/'.replace(/\/$/, ''); // "/litelement-inghubs-employee-crud"
-            var p = location.pathname;
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script>
+      (function () {
+        var repoBase = '/litelement-inghubs-employee-crud';
+        var p = location.pathname;
 
-            // Strip "/repo" from "/repo/employees/new" => "/employees/new"
-            if (p.startsWith(base)) p = p.slice(base.length) || '/';
-
-            sessionStorage.redirect = p + location.search + location.hash;
-        })();
-        </script>
-        <meta http-equiv="refresh" content="0;URL='/litelement-inghubs-employee-crud/'">
-    </head>
-    <body></body>
-    </html>
+        if (p.startsWith(repoBase)) p = p.slice(repoBase.length) || '/';
+        sessionStorage.redirect = p + location.search + location.hash;
+      })();
+    </script>
+    <meta http-equiv="refresh" content="0;URL='/litelement-inghubs-employee-crud/'">
+  </head>
+  <body></body>
+</html>
