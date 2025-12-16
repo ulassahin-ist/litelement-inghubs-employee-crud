@@ -20,6 +20,7 @@ class AppShell extends LitElement {
   firstUpdated() {
     const outlet = this.querySelector('#outlet');
     const router = new Router(outlet);
+    window.router = router;
 
     const baseHref =
       document.querySelector('base')?.getAttribute('href') ?? '/';
