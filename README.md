@@ -1,6 +1,7 @@
 [![Live Demo](https://img.shields.io/badge/demo-live-yellow)](https://ulassahin-ist.github.io/litelement-inghubs-employee-crud/)
 [![GitHub](https://img.shields.io/badge/github-repository-blue)](https://github.com/ulassahin-ist/litelement-inghubs-employee-crud)
-(Spacing is not by my design, this was built upon request. Acknowledged by the developer that margins look terrible)
+
+##(Spacing is not by my design, this was built upon request. Acknowledged by the developer that margins look terrible)
 
 
 LitElement + Vaadin Router employee management SPA
